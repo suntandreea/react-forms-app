@@ -4,47 +4,32 @@ const SimpleInput = (props) => {
 
   const nameInputRef = useRef();
   const [enteredName, setEnteredName] = useState('');
-  const [enteredNameIsValid, setEnteredNameIsValid] = useState(false);
   const [enteredNameIsTouched, setEnteredNameIsTouched] = useState(false);
+
+  const enteredNameIsValid = enteredName.trim() !== '';
+  const nameInputIsInvalid = !enteredNameIsValid && enteredNameIsTouched;
 
   const nameInputChangeHandler = event => {
     setEnteredName(event.target.value);
-
-    if (event.target.value.trim() !== '') { // nu fol enteredName aici pt ca statul inca retine valoarea anterioara!
-      setEnteredNameIsValid(true);
-    }
   };
 
   const nameInputBlurHandler = event => {
-    // daca inputul isi pierde focusul, categorig a fost touched (modificat sau confirmat)
     setEnteredNameIsTouched(true);
-
-    if (enteredName.trim() === '') {
-      setEnteredNameIsValid(false);
-    }
   };
 
   const formSubmissionHandler = event => {
     event.preventDefault();
 
-    // const enteredValue = nameInputRef.current.value;
-    // console.log(enteredValue);
-
-    // nameInputRef.current.value = ''; // !!! NOT IDEAL, DON'T MANIPULATE THE DOM!
-
     setEnteredNameIsTouched(true);
 
-    if (enteredName.trim() === '') {
-      setEnteredNameIsValid(false);
+    if (!enteredNameIsValid) {
       return;
     }
 
     console.log(enteredName);
     setEnteredName('');
-
+    setEnteredNameIsTouched(false);
   };
-
-  const nameInputIsInvalid = !enteredNameIsValid && enteredNameIsTouched;
 
   const nameInputClasses = nameInputIsInvalid ? 'form-control invalid' : 'form-control';
 
